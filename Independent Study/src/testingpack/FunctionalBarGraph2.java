@@ -1,11 +1,8 @@
 package testingpack;
 
-import java.util.*;
+import java.util.Scanner;
 import java.util.stream.*;
-/**
- * @author Sam Hooper
- *
- */
+
 public class FunctionalBarGraph2 {
 	
 	public static void main(String[] args) {

@@ -3,10 +3,6 @@ package testingpack;
 import java.util.*;
 import java.util.stream.*;
 
-/**
- * @author Sam Hooper
- *
- */
 public class FunctionalBarGraph3 {
 	
 	public static void main(String[] args) {

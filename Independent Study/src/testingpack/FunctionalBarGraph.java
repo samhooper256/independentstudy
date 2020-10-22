@@ -2,10 +2,6 @@ package testingpack;
 
 import java.util.Scanner;
 
-/**
- * @author Sam Hooper
- *
- */
 public class FunctionalBarGraph {
 	
 	public static void main(String[] args) {
@@ -24,16 +20,6 @@ public class FunctionalBarGraph {
 		return from(lines, new StringBuilder(), 0, longestLength(lines));
 	}
 	
-	private static String from(String[] lines, StringBuilder builder, int index, int maxLen) {
-		return index == lines.length ?
-				builder.toString() :
-				from(lines, builder.append(fromLine(lines[index].split(" "), maxLen)).append('\n'), index + 1, maxLen);
-	}
-	
-	private static String fromLine(String[] parts, int maxLen) {
-		return format(parts[0], maxLen) + " | " + "X".repeat(Integer.parseInt(parts[1]));
-	}
-	
 	private static int longestLength(String[] lines) {
 		return longestLength(lines, 0, 0);
 	}
@@ -44,6 +30,16 @@ public class FunctionalBarGraph {
 	
 	private static int max(int a, int b) {
 		return a > b ? a : b;
+	}
+	
+	private static String from(String[] lines, StringBuilder builder, int index, int maxLen) {
+		return index == lines.length ?
+				builder.toString() :
+				from(lines, builder.append(fromLine(lines[index].split(" "), maxLen)).append('\n'), index + 1, maxLen);
+	}
+	
+	private static String fromLine(String[] parts, int maxLen) {
+		return format(parts[0], maxLen) + " | " + "X".repeat(Integer.parseInt(parts[1]));
 	}
 	
 	private static String format(String s, int size) {

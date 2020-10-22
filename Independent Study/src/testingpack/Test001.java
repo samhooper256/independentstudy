@@ -1,5 +1,7 @@
 package testingpack;
 
+import java.util.*;
+
 /**
  * @author Sam Hooper
  *
@@ -13,7 +15,15 @@ public class Test001 {
 		goo((Object) s);
 		Object o = "";
 		goo(o);
+		
+		var e = union(Set.of(1,2,3), Set.of(1.2));
+		Number n;
 	}
+	
+	private static <E>  Set<E> union(Set<? extends E> s1, Set<? extends E> s2) {
+		return null;
+		
+	} 
 	
 	public static void goo(String s) {
 		System.out.printf("STRING%n");
