@@ -10,7 +10,6 @@ import java.util.stream.*;
 public class FunctionalBarGraph3 {
 	
 	public static void main(String[] args) {
-
 		List<String[]> list = Stream.generate(new Scanner(System.in)::nextLine).takeWhile(line -> !line.equals("DONE"))
 				.map(s -> s.split(" ")).collect(Collectors.toList());
 		int maxLen = list.stream().mapToInt(s -> s[0].length()).max().getAsInt();
@@ -18,7 +17,4 @@ public class FunctionalBarGraph3 {
 				.forEach(System.out::println);
 	}
 	
-	//	List<String[]> list = Arrays.stream(new Scanner(System.in).findWithinHorizon("(?s).*?(?=DONE)", 0).split("[\n\r]"))
-	//	.map(s -> s.split(" ")).collect(Collectors.toList());
-	//list.stream().map(Arrays::toString).forEach(System.out::println);
 }

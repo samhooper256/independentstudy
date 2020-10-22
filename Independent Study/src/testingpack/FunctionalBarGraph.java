@@ -31,15 +31,15 @@ public class FunctionalBarGraph {
 	}
 	
 	private static String fromLine(String[] parts, int maxLen) {
-		return format(parts[0], maxLen) + " | " + "X".repeat(parse(parts[1]));
+		return format(parts[0], maxLen) + " | " + "X".repeat(Integer.parseInt(parts[1]));
 	}
 	
 	private static int longestLength(String[] lines) {
-		return longestSize(lines, 0, 0);
+		return longestLength(lines, 0, 0);
 	}
 	
-	private static int longestSize(String[] lines, int largestFound, int index) {
-		return index == lines.length ? largestFound : longestSize(lines, max(largestFound, lines[index].indexOf(' ')), index + 1);
+	private static int longestLength(String[] lines, int largestFound, int index) {
+		return index == lines.length ? largestFound : longestLength(lines, max(largestFound, lines[index].indexOf(' ')), index + 1);
 	}
 	
 	private static int max(int a, int b) {
@@ -48,10 +48,6 @@ public class FunctionalBarGraph {
 	
 	private static String format(String s, int size) {
 		return s + " ".repeat(size - s.length());
-	}
-	
-	private static int parse(String s) {
-		return Integer.parseInt(s);
 	}
 	
 }
