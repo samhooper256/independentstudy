@@ -1,5 +1,6 @@
 package testingpack;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -8,6 +9,10 @@ import java.util.*;
  */
 public class Test001 {
 	public static void main(String[] args) {
+		Class<?> clazz0 = Serializable.class;
+		Class<?> clazz1 = (new ArrayList<String>()).getClass();
+		Class<?> clazz2 = (new ArrayList<Integer>()).getClass();
+		System.out.println(clazz1.equals(clazz2));
 		goo("");
 		goo((Object) "");
 		String s = "";

@@ -1,4 +1,4 @@
-package testingpack;
+package day1;
 
 import java.util.Scanner;
 import java.util.stream.*;
