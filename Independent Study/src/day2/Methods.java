@@ -25,6 +25,12 @@ public class Methods {
 //		System.out.println(pair1);
 //		Pair<Double, String> pair2 = new Pair<>(2.3, "goof");
 //		System.out.println(Pair.merge(pair1, pair2));
+		
+		List<String> strings = new ArrayList<>();
+		
+		Set<CharSequence> set = toSet(strings);
+		
+		
 	}
 	
 	public static <T> void print(Collection<T> coll) {
@@ -40,7 +46,7 @@ public class Methods {
 	}
 	
 	/* Converts a List to Set */
-	public static <T> Set<T> toSet(List<T> list) {
-		return new HashSet<>(list);
+	public static <L extends S, S> Set<S> toSet(List<L> list) {
+		return new HashSet<S>(list);
 	}
 }
