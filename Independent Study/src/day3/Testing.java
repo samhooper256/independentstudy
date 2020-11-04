@@ -59,6 +59,7 @@ public class Testing {
 		sumNums(3,5,2);
 		sumNums(214,45,245,2,52,5);
 		
+		HashSet<String> st = new HashSet<>();
 	}
 	
 	public static int sumNums(int... arr) {
@@ -69,20 +70,20 @@ public class Testing {
 	}
 	
 	//intersection
-	public static <T extends Number> double sum(Collection<T> nums) {
+	public static double sum(Collection<? extends Number> nums) {
 		double sum = 0;
 		for(Number n : nums)
 			sum += n.doubleValue();
 		return sum;
 	}
 	
-	public static <R, T1 extends R, T2 extends R> List<R> merge(List<T1> a, List<T2> b) {
+	public static <R> List<R> merge(List<? extends R> a, List<? extends R> b) {
 		ArrayList<R> list = new ArrayList<>(a);
 		list.addAll(b);
 		return list;
 	}
 	
-	public static <T extends CharSequence> String concat(Collection<T> collection) {
+	public static String concat(Collection<? extends CharSequence> collection) {
 		StringBuilder result = new StringBuilder();
 		for(CharSequence csq : collection)
 			result.append(csq.toString());
