@@ -6,6 +6,10 @@ import java.util.*;
  *
  */
 public class Test002 {
+	
+	<T extends S, S>void method() {
+		Character c;
+	}
 	public static void main(String[] args) {
 		
 		ArrayList<? extends List<? extends Number>> list1 = null;
