@@ -12,7 +12,7 @@ public class FunctionalBarGraph2 {
             .collect(
             	Collectors.teeing(
             		Collectors.maxBy((a, b) -> Integer.compare(a[0].length(), b[0].length())),
-            		Collectors.mapping(x -> x, Collectors.toList()), 
+            		Collectors.toList(), 
             		(longestString, list) -> list.stream().map(
         				s -> s[0] + " ".repeat(longestString.get()[0].length() - s[0].length()) + " | " +
         				"X".repeat(Integer.parseInt(s[1]))
