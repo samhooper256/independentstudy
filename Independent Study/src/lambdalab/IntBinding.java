@@ -6,7 +6,13 @@ package lambdalab;
  * It also provides several other useful methods, such as {@link #divide(IntBinding)} or {@link #add(IntBinding)} that
  * create {@code IntBindings} whose value depends on another.</p>
  * 
- * <p>All {@code IntBindings} returned by instance methods in this interface (such as {@link #divide(IntBinding)} or
+ * <p>If the value of an {@code IntBinding} <b><i>x</i></b> depends on the value of an {@code IntBinding} <b><i>y</i></b>,
+ * this class does not define whether x's change listeners run before y's or y's run before x's. (Note, however,
+ * that any change to x is visible to x's listeners and any change to y is visible to y's listeners, as
+ * per the specification of {@link ReadableInt}).
+ * This rule also applies to all {@code IntBindings} returned by instance methods in this class.</p>
+ * 
+ * <p>All {@code IntBindings} returned by instance methods in this class (such as {@link #divide(IntBinding)} or
  * {@link #subtract(int)}) are dynamically updated - that is, whenever the value of something they depend on changes,
  * they are automatically updated. Some example code illustrates this:</p>
  * <pre><code>

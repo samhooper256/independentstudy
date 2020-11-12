@@ -1,7 +1,5 @@
 package lambdalab;
 
-import lambdalab.Tester.IntRef;
-
 public class Tester {
 	
 	private static boolean wChanged, xChanged, yChanged, zChanged, sum1Changed, sum2Changed, productChanged;
@@ -13,9 +11,10 @@ public class Tester {
 		isBoundReturnsFalseWhenNotBound();
 		unbindingIntPropertyThatIsNotBoundThrowsException();
 		changeListenersCanBeAddedAndRemoved_AndFireAppropriately();
+		changeIsVisibleBeforeListenersAreRun();
 		changeListenersArePassedCorrectValues();
-		unbindingStopsRunningListeners();
 		simpleBindingAndUnbindingTest();
+		changeIsVisibleBeforeBoundsListenersAreRun();
 		throwsExceptionWhenAttemptingToSetWhileBound();
 		bindingAndUnbindingWithListenersTest();
 		intBindingsReturnAppropriateValues_WhenSecondOperandIsAConstant();
@@ -24,20 +23,37 @@ public class Tester {
 		bindingToIntPropertyDividedByConstant_WithChangeListeners();
 		changeListenersAreCorrect_ForComposedBindings();
 		complexBindingsAndListeners();
-		System.out.println("Success! All tests passed.");
-	}
-	
-	private static void unbindingStopsRunningListeners() {
-		IntProperty x = new IntProperty(3), y = new IntProperty(7);
-		x.addChangeListener((o, n) -> { xChanged = true; });
-		x.bind(y);
-		x.unbind();
-		xChanged = false;
-		y.set(20);
-		ensure(!xChanged, "x was bound to y, then it was unbound. x's change listeners were still fired when y changed,"
-				+ " even after x was unbound to y.");
+		System.out.println("Success!");
 	}
 
+	private static void changeIsVisibleBeforeListenersAreRun() {
+		IntProperty x = new IntProperty(3);
+		IntRef xVal = new IntRef(-1);
+		x.addChangeListener((o, n) -> {xVal.value=x.get();});
+		x.set(15);
+		if(xVal.value == -1)
+			ensure(false, "Change listener was not run after IntProperty was set using set(...) method.");
+		ensure(xVal.value == 15, "changes to IntProperty are not visible when that IntProperty's change listeners are running.");
+	}
+
+	private static void changeIsVisibleBeforeBoundsListenersAreRun() {
+		IntProperty x = new IntProperty(3);
+		IntProperty y = new IntProperty();
+		y.bind(x);
+		IntRef yVal = new IntRef(-1), xVal = new IntRef(-1);
+		y.addChangeListener((o, n) -> {
+			yVal.value = y.get();
+		});
+		x.addChangeListener((o, n) -> {
+			xVal.value = x.get();
+		});
+		x.set(12);
+		ensure(xVal.value == 12, "change in the value of the IntProperty 'x' was not visible to x's change listneers");
+		ensure(yVal.value == 12, "change in the value of y that occured due to a change in x (y is bound to x)"
+				+ " was not visible to y's change listeners");
+		
+	}
+	
 	private static void unbindingIntPropertyThatIsNotBoundThrowsException() {
 		try {
 			IntProperty p = new IntProperty(3);
@@ -310,9 +326,7 @@ public class Tester {
 		xChanged = yChanged = zChanged = false;
 		x.set(-1);
 		ensure(!x.isBound(), y.isBound(), z.isBound());
-		ensure(xChanged, "x's change listeners were not fired when it was set using the set(...) method");
-		ensure(yChanged, "y's change listeners were not fired when its bound, x, changed.");
-		ensure(zChanged, "z's change listeners were not fired when its bound, y, changed.");
+		ensure(xChanged, yChanged, zChanged);
 		ensure(x.get() == -1, y.get() == -1, z.get() == -1);
 		
 		xChanged = yChanged = zChanged = false;
