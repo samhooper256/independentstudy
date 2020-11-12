@@ -16,9 +16,13 @@ public interface ReadableInt {
 	int get();
 	
 	/**
-	 * Adds an {@link IntChangeListener} that listens to this {@link ReadableInt}. This listener will be fired
+	 * <p>Adds an {@link IntChangeListener} that listens to this {@link ReadableInt}. This listener will be fired
 	 * whenever the {@link #get() value} of this {@code ReadableInt} changes. The listeners currently
-	 * listening to this {@code ReadableInt} are fired in the order they were added (via this method).
+	 * listening to this {@code ReadableInt} are fired in the order they were added (via this method).</p>
+	 * 
+	 * <p><b>The listeners are fired <i>after</i> the value of this {@code ReadableInt} changes. If
+	 * {@link #get()} were called in the body of the functional method of one of the listeners,
+	 * it would return the new value.</b></p>
 	 * @param listener the {@link IntChangeListener} that will listen to this {@link ReadableInt}.
 	 */
 	void addChangeListener(final IntChangeListener listener);
