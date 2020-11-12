@@ -1,5 +1,7 @@
 package lambdalab;
 
+import lambdalab.Tester.IntRef;
+
 public class Tester {
 	
 	private static boolean wChanged, xChanged, yChanged, zChanged, sum1Changed, sum2Changed, productChanged;
@@ -12,6 +14,7 @@ public class Tester {
 		unbindingIntPropertyThatIsNotBoundThrowsException();
 		changeListenersCanBeAddedAndRemoved_AndFireAppropriately();
 		changeListenersArePassedCorrectValues();
+		unbindingStopsRunningListeners();
 		simpleBindingAndUnbindingTest();
 		throwsExceptionWhenAttemptingToSetWhileBound();
 		bindingAndUnbindingWithListenersTest();
@@ -24,6 +27,17 @@ public class Tester {
 		System.out.println("Success! All tests passed.");
 	}
 	
+	private static void unbindingStopsRunningListeners() {
+		IntProperty x = new IntProperty(3), y = new IntProperty(7);
+		x.addChangeListener((o, n) -> { xChanged = true; });
+		x.bind(y);
+		x.unbind();
+		xChanged = false;
+		y.set(20);
+		ensure(!xChanged, "x was bound to y, then it was unbound. x's change listeners were still fired when y changed,"
+				+ " even after x was unbound to y.");
+	}
+
 	private static void unbindingIntPropertyThatIsNotBoundThrowsException() {
 		try {
 			IntProperty p = new IntProperty(3);
@@ -296,7 +310,9 @@ public class Tester {
 		xChanged = yChanged = zChanged = false;
 		x.set(-1);
 		ensure(!x.isBound(), y.isBound(), z.isBound());
-		ensure(xChanged, yChanged, zChanged);
+		ensure(xChanged, "x's change listeners were not fired when it was set using the set(...) method");
+		ensure(yChanged, "y's change listeners were not fired when its bound, x, changed.");
+		ensure(zChanged, "z's change listeners were not fired when its bound, y, changed.");
 		ensure(x.get() == -1, y.get() == -1, z.get() == -1);
 		
 		xChanged = yChanged = zChanged = false;
