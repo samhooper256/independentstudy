@@ -34,6 +34,7 @@ public class Tester {
 				throw new AssertionError("Attempting to unbind an IntProperty that is not bound produces the wrong type of exception."
 						+ " It was supposed to produce an IllegalArgumentException, but instead it produced a: "
 						+ e.getClass().getSimpleName());
+			return;
 		}
 		throw new AssertionError("Attempting to unbind an IntProperty that is not bound did not throw an IllegalArgumentException.");
 	}
@@ -48,6 +49,7 @@ public class Tester {
 			if(!(e instanceof IllegalArgumentException))
 				throw new AssertionError("Attempting to set a bound IntProperty produces the wrong type of exception. It was supposed"
 						+ "to produce an IllegalArgumentException, but instead it produced a: " + e.getClass().getSimpleName());
+			return;
 		}
 		throw new AssertionError("Attempting to set a bound IntProperty did not throw an IllegalArgumentException.");
 	}
