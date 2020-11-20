@@ -6,6 +6,7 @@ public class Tester {
 	static class IntRef { int value; IntRef(int v) { value = v; }}
 	
 	public static void main(String[] args) {
+		
 		getAndSet_intConstructor();
 		getAndSet_NoArgConstructor();
 		isBoundReturnsFalseWhenNotBound();
@@ -15,6 +16,7 @@ public class Tester {
 		changeListenersArePassedCorrectValues();
 		simpleBindingAndUnbindingTest();
 		changeIsVisibleBeforeBoundsListenersAreRun();
+		listenersStopRunningForOldProperty_WhenBoundToNewProperty();
 		throwsExceptionWhenAttemptingToSetWhileBound();
 		bindingAndUnbindingWithListenersTest();
 		intBindingsReturnAppropriateValues_WhenSecondOperandIsAConstant();
@@ -24,6 +26,25 @@ public class Tester {
 		changeListenersAreCorrect_ForComposedBindings();
 		complexBindingsAndListeners();
 		System.out.println("Success!");
+	}
+
+	private static void listenersStopRunningForOldProperty_WhenBoundToNewProperty() {
+		IntProperty x = new IntProperty(3);
+		IntProperty y = new IntProperty(7);
+		IntProperty z = new IntProperty(11);
+		xChanged = yChanged = zChanged = false;
+		x.bind(y);
+		x.addChangeListener((o, n) -> {xChanged = true;});
+		y.set(8);
+		ensure(xChanged, "the IntProperty 'x' did not run its change listeners when its bound 'y' changed due to a set(...) call.");
+		xChanged = false;
+		x.bind(z);
+		ensure(xChanged, "the IntProperty 'x' did not run its change listeners when its bound was changed from"
+				+ " 'y' to 'z' (y's value does not equal z's value).");
+		xChanged = false;
+		y.set(23);
+		ensure(!xChanged, "x's change listeners ran when the property 'x' was previously bound to changed, "
+				+ "even though x is no longer bound to that property.");
 	}
 
 	private static void changeIsVisibleBeforeListenersAreRun() {

@@ -1,5 +1,7 @@
 package lambdalab;
 
+import java.util.*;
+
 /**
  * <p>An abstract class that implements {@link ReadableInt} whose value can be bound to (See {@link IntProperty#bind(IntBinding)}, for
  * example). This class provides the skeleton for a {@code ReadableInt} by maintaining the {@link IntChangeListener IntChangeListeners}.
@@ -34,15 +36,31 @@ public abstract class IntBinding implements ReadableInt {
 	 * @return an {@link IntBinding} with a constant {@link ReadableInt#get() value}.
 	 */
 	public static IntBinding of(final int value) {
-		return null; //TODO
+		//I used an anonymous class here because it's a little more concise.
+		//If you wanted to, you could have made your own subclass of IntBinding (such as "ConstantIntBinding")
+		//that always returns the same value from get(). You don't need to worry about listeners,
+		//because the value will never change.
+		return new IntBinding() {
+			
+			@Override
+			public int get() {
+				return value;
+			}
+			
+		};
 	}
+	
+	private List<IntChangeListener> listeners;
 	
 	/**
 	 * Creates a new {@link IntBinding} with no {@link IntChangeListener IntChangeListeners}. The {@link ReadableInt#get() value}
 	 * of the created {@code IntBinding} is undefined.
 	 */
 	public IntBinding() {
-		//TODO
+		listeners = new ArrayList<>(); //If you wanted to be more memory efficient, you could initially set
+		//'listeners' to 'null' and only create the ArrayList object when a change listener is actually
+		//added. This way we don't waste memory creating a list of change listeners to something that will
+		//likely never have change listeners added to it (like a constant, for example).
 	}
 	
 	/**
@@ -55,17 +73,19 @@ public abstract class IntBinding implements ReadableInt {
 	 * {@code newValue}).
 	 */
 	protected void runChangeListeners(final int oldValue, final int newValue) {
-		//TODO
+		if(oldValue != newValue)
+			for(IntChangeListener listener : listeners)
+				listener.changed(oldValue, newValue);
 	}
 	
 	@Override
 	public void addChangeListener(IntChangeListener listener) {
-		//TODO
+		listeners.add(listener);
 	}
 
 	@Override
 	public boolean removeChangeListener(IntChangeListener listener) {
-		return false; //TODO
+		return listeners.remove(listener);
 	}
 	
 	/**
@@ -73,7 +93,7 @@ public abstract class IntBinding implements ReadableInt {
 	 * the value of {@code this} and {@code multiplier}.
 	 */
 	public IntBinding multiply(final int multiplier) {
-		return null; //TODO
+		return multiply(of(multiplier));
 	}
 	
 	/**
@@ -81,7 +101,7 @@ public abstract class IntBinding implements ReadableInt {
 	 * whose {@link ReadableInt#get() value} is the product of the value of {@code this} and the value of {@code multiplier}.
 	 */
 	public IntBinding multiply(final IntBinding multiplier) {
-		return null; //TODO
+		return fromOperator((a, b) -> a * b, multiplier);
 	}
 	
 	/**
@@ -89,7 +109,7 @@ public abstract class IntBinding implements ReadableInt {
 	 * the value of {@code this} divided by {@code divisor}.
 	 */
 	public IntBinding divide(final int divisor) {
-		return null; //TODO
+		return divide(of(divisor));
 	}
 	
 	/**
@@ -97,7 +117,7 @@ public abstract class IntBinding implements ReadableInt {
 	 * is equal to the value of {@code this} divided by the value of {@code divisor}.
 	 */
 	public IntBinding divide(final IntBinding divisor) {
-		return null; //TODO
+		return fromOperator((a, b) -> a / b, divisor);
 	}
 	
 	/**
@@ -105,7 +125,7 @@ public abstract class IntBinding implements ReadableInt {
 	 * of the value of {@code this} and {@code addend}.
 	 */
 	public IntBinding add(final int addend) {
-		return null; //TODO
+		return add(of(addend));
 	}
 	
 	/**
@@ -113,7 +133,9 @@ public abstract class IntBinding implements ReadableInt {
 	 * is the sum of the value of {@code this} and the value of {@code addend}.
 	 */
 	public IntBinding add(final IntBinding addend) {
-		return null; //TODO
+		return fromOperator((a, b) -> a + b, addend);
+		//You could also write the above line as:
+		//return fromOperator(Integer::sum, addend);
 	}
 	
 	/**
@@ -121,7 +143,7 @@ public abstract class IntBinding implements ReadableInt {
 	 * value of {@code this} minus {@code subtrahend}.
 	 */
 	public IntBinding subtract(final int subtrahend) {
-		return null; //TODO
+		return subtract(of(subtrahend));
 	}
 	
 	/**
@@ -129,7 +151,44 @@ public abstract class IntBinding implements ReadableInt {
 	 * the value of {@code subtrahend}.
 	 */
 	public IntBinding subtract(final IntBinding subtrahend) {
-		return null; //TODO
+		return fromOperator((a, b) -> a - b, subtrahend);
 	}
 	
+	//In the spirit of lambdas (and also in saving a lot of unnecessary code) I decided to implement my "multiply",
+	//"add", "subtract", etc. methods using a functional interface. The fromOp() method takes the operation (such as
+	//addition, subtraction, etc.) and the second operand to that operation as an IntBinding. This way I can implement
+	//all four of the mathematical operator methods in a single (anonymous) class.
+	@FunctionalInterface
+	private interface Operator {
+		int apply(int a, int b);
+	}
+	
+	private IntBinding fromOperator(Operator op, IntBinding second) {
+		//again, you could have written your own class here, but I decided to do it anonymously.
+		return new IntBinding() {
+			//I'm using an instance initializer to do some preliminary "construction" of the object:
+			{	
+				//The change listeners will be called for two reasons:
+				//	1) When the first operand (the enclosing instance of this anonymous class) changes
+				//	2) When the second operand ('second') changes.
+				IntBinding.this.addChangeListener((o, n) -> runChangeListeners(op.apply(o, second.get()), get()));
+				//'IntBinding.this' refers to the enclosing class (the non-anonymous one). If I just used
+				//'this', it would refer to the anonymous class that this comment is in.
+				second.addChangeListener((o, n) -> runChangeListeners(op.apply(IntBinding.this.get(), o), get()));
+				//Note that I'm recomputing what the "old value" was on demand, which could be avoided if we stored
+				//the old value in an instance variable or something. I decided not to go with that approach.
+			}
+
+			@Override
+			public int get() {
+				//the result is computed live when get() is called.
+				return op.apply(IntBinding.this.get(), second.get());
+				//Alternatively, we could compute the new value of this IntBinding whenever it changes, store it in an instance
+				//variable, and return it here. That would likely be more efficient, at the cost of some extra memory.
+				//I just went with the simple approach here.
+			}
+			
+		};
+	}
+
 }
