@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.*;
 
+
 public class Main {
 	
 	interface Func {
@@ -12,6 +13,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
+		
 		List<String> strs = List.of("abc", "234a", " 0zz", "aefaf", "E", "aeQ~", "p");
 		
 		Func f = Math::sqrt;
@@ -34,9 +36,11 @@ public class Main {
 		
 		System.out.println(len.apply("abc"));
 		
-		BiFunction<String, String, Integer> indexOf = String::indexOf;
-
-		System.out.println(indexOf.apply("cat", "a"));
+		BiFunction<String, String, Integer> indexOf1 = String::indexOf;
+		
+		Function<String, Integer> indexOf2 = "Hello"::indexOf;
+		
+		System.out.println(indexOf1.apply("cat", "a"));
 		
 		Supplier<List<String>> listMaker = ArrayList::new;
 		
