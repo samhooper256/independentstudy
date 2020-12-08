@@ -29,6 +29,8 @@ public class MoreTesting {
 		System.out.println(strs.stream().anyMatch(s -> s.startsWith("c")));
 		
 		System.out.println(strs.stream().count());
+		
+		
 	}
 	
 }
