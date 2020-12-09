@@ -17,17 +17,19 @@ public class Practice {
 	
 	/* Q1: Given a double[], return its sum. */
 	public static double sum(final double[] arr) {
-		throw new UnsupportedOperationException();
+		return Arrays.stream(arr).sum();
 	}
 	
 	 /* Q2: Return an array of 'size' random doubles, each between 0 (inclusive) and 1.0 (exclusive). */
 	public static double[] randoms(final int size) {
-		throw new UnsupportedOperationException();
+//		return Stream.generate(Math::random).limit(size).toArray(Double[]::new); //for Double[]
+		return DoubleStream.generate(Math::random).limit(size).toArray(); //for double[]
+//		return new Random().doubles(size).toArray(); //for double[]
 	}
 	
 	/* Q3: Given a Set<Integer>, return a Map<Integer, Integer> that maps each Integer in the original set to its square. */
 	public static Map<Integer, Integer> squareMap(final Set<Integer> nums) {
-		throw new UnsupportedOperationException();
+		return nums.stream().collect(Collectors.toMap(x -> x, x -> x * x));
 	}
 	
 	/* Q4: Given a Collection<String>, return a Set<String> containing the first characters of each String in the given Collection.
@@ -38,7 +40,7 @@ public class Practice {
 	  * The given Collection may contain empty Strings - make sure to ignore those!
 	  * */
 	public static Set<String> firstChars(final Collection<String> strs) {
-		throw new UnsupportedOperationException();
+		return strs.stream().filter(s -> !s.isEmpty()).map(s -> s.substring(0, 1)).collect(Collectors.toSet());
 	}
 	
 	/* Q5 ("Extra"): Given an int[], return a long[] containing the same values. */

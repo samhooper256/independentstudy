@@ -5,8 +5,10 @@ import java.nio.file.*;
 
 public class FileTester {
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
+		
 		Files.lines(Path.of("src/day10/input.txt")).forEach(System.out::println);
+		
 	}
 	
 }
