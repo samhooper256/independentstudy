@@ -14,9 +14,9 @@ public class Practice {
 	}
 	
 	/*
-	 * Q1: Given a Collection<String>, return the first String containing period ('.'), or null if no such String exists.
+	 * Q1: Given a List<String>, return the first String containing period ('.'), or null if no such String exists.
 	 */
-	public static String periodString(Collection<String> strs) {
+	public static String periodString(List<String> strs) {
 		throw new UnsupportedOperationException();
 	}
 	
