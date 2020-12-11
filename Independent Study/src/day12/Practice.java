@@ -14,7 +14,8 @@ public class Practice {
 	}
 	
 	/*
-	 * Q1: Given a List<String>, return the first String containing period ('.'), or null if no such String exists.
+	 * Q1: Given a List<String>, return the first String in the List that contains a period ('.'), or null if no such
+	 * String exists.
 	 */
 	public static String periodString(List<String> strs) {
 		throw new UnsupportedOperationException();
@@ -22,6 +23,7 @@ public class Practice {
 	
 	/*
 	 * Q2: Given a double[], return a List<Long> containing the doubles rounded to the nearest long.
+	 * The longs in the List should be in the same order as their unrounded counterparts in the array.
 	 * 
 	 * (Hint: Math.round(double) returns a long).
 	 */
