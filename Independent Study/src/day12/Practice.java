@@ -18,31 +18,34 @@ public class Practice {
 	 * String exists.
 	 */
 	public static String periodString(List<String> strs) {
-		throw new UnsupportedOperationException();
+		return strs.stream().filter(s -> s.contains(".")).findFirst().orElse(null);
 	}
 	
 	/*
 	 * Q2: Given a double[], return a List<Long> containing the doubles rounded to the nearest long.
-	 * The longs in the List should be in the same order as their unrounded counterparts in the array.
+	 * The Longs in the List should be in the same order as their unrounded counterparts in the array.
 	 * 
 	 * (Hint: Math.round(double) returns a long).
 	 */
 	public static List<Long> rounded(double[] nums) {
-		throw new UnsupportedOperationException();
+		return Arrays.stream(nums).mapToLong(Math::round).boxed().collect(Collectors.toList());
+//		return Arrays.stream(nums).boxed().map(n -> Math.round(n)).collect(Collectors.toList());
 	}
 	
 	/*
 	 * Q3: Given an int[], return true if the smallest x unique ints in the given array are all less than y, false otherwise.
 	 */
 	public static boolean smallEnough(int[] nums, int x, int y) {
-		throw new UnsupportedOperationException();
+		return Arrays.stream(nums).distinct().sorted().limit(x).allMatch(i -> i < y);
+//		return Arrays.stream(nums).distinct().filter(i -> i < y).count() <= x;
 	}
 	
 	/*
-	 * Q4: Given a Collection<Double>, return the product of its elements as a double. Return 1.0 if it has one or fewer element(s).
+	 * Q4: Given a Collection<Double>, return the product of its elements as a double. Return 1.0 if it no elements.
 	 */
 	public static double product(Collection<Double> nums) {
-		throw new UnsupportedOperationException();
+		return nums.stream().reduce(1.0, (a, b) -> a * b);
+//		return nums.stream().mapToDouble(d -> d.doubleValue()).reduce(1.0, (a,b) -> a * b);
 	}
 	
 	/*
@@ -51,8 +54,7 @@ public class Practice {
 	 * are both positive, they are less than the Stream's length if it is finite, and endExclusive > startInclusive). 
 	 */
 	public static <T> Stream<T> substream(Stream<T> stream, int startInclusive, int endExclusive) {
-		throw new UnsupportedOperationException();
+		return stream.skip(startInclusive).limit(endExclusive - startInclusive);
 	}
-	
 	
 }
