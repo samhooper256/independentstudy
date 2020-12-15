@@ -10,13 +10,21 @@ import java.util.stream.*;
 public class Practice {
 	
 	public static void main(String[] args) {
+		System.out.println(shortestSpaceless(Set.of(" ", "or", "cat", "g a p")));
 		System.out.println(lastDigitSorted(new int[]{17,102,88,0}));
 		System.out.println(maxCharacterSum(List.of("car", "boy", "yam", "axe")));
 	}
 	
 	/* Q1: Return the shortest String in the given Set<String> that does not contain any spaces (' '), or null if no such String exists. */ 
 	public static String shortestSpaceless(Set<String> strs) {
-		throw new UnsupportedOperationException();
+		return strs.stream().filter(s -> !s.contains(" ")).min(Comparator.comparingInt(String::length)).orElse(null);
+//		return strs.stream().filter(s -> !s.contains(" ")).min((s1, s2) -> {
+//			if(s1.length() < s2.length())
+//				return -1;
+//			if(s1.length() == s2.length())
+//				return 0;
+//			return 1;
+//		}).orElse(null);
 	}
 	
 	/* Q2: Given an int[], return a List<Integer> containing the elements in the int[] sorted by their last digit (in increasing order).
@@ -25,18 +33,20 @@ public class Practice {
 	 * last digit, they may appear in any order relative to one another in the returned List. (In other words, the sort need not be stable).
 	 */
 	public static List<Integer> lastDigitSorted(int[] arr) {
-		throw new UnsupportedOperationException();
+		return Arrays.stream(arr).boxed().sorted(Comparator.comparingInt(i -> i % 10)).collect(Collectors.toList());
 	}
 	
 	/* Q3: Given a List<String>, return a StringBuilder storing all the Strings in the List concatenated to one another, in order.
 	 * For example, concat(List.of("a", "b", "c")) returns a StringBuilder whose toString() returns "abc".
 	 * Reminders:
-	 * 	  -	The method append(CharSequence) on StringBuilders adds the given CharSequence to the StringBuilder's contents. The method also returns the StringBuilder
-	 * 		it was called from (In other words, the method body ends with "return this;")
-	 *    - The toString() method of a StringBuilder returns its contents. For example, new StringBuilder().append("le").append("t").toString() returns "let".
+	 * 	  -	The method append(CharSequence) on StringBuilders adds the given CharSequence to the StringBuilder's contents. The method also returns
+	 * 		the StringBuilder it was called from (In other words, the method body ends with "return this;")
+	 *    - The toString() method of a StringBuilder returns its contents. For example, new StringBuilder().append("le").append("t").toString()
+	 *    	returns "let".
 	 */
 	public static StringBuilder concat(List<String> strs) {
-		throw new UnsupportedOperationException();
+		return new StringBuilder(strs.stream().reduce("", (s1, s2) -> s1 + s2));
+//		return strs.stream().reduce(new StringBuilder(), StringBuilder::append, StringBuilder::append);
 	}
 	
 	/* Q4 (EXTRA): Given a Collection<String>, return the String where the sum of its characters' int values is maximal. If multiple Strings tie for the
@@ -52,7 +62,7 @@ public class Practice {
 	 *				"axe" = 97  + 120 + 101 = 318
 	 */
 	public static String maxCharacterSum(final Collection<String> strs) {
-		throw new UnsupportedOperationException();
+		return strs.stream().max(Comparator.comparingInt(s -> s.chars().sum())).get();
 	}
 	
 }
